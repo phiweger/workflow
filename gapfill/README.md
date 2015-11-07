@@ -19,5 +19,5 @@ where the yaml file specifies
 
 Usage pattern:
 
-    python3 gapfill.py -h
-    python3 gapfill.py -i example.md -o examplemod.md -y example.yaml
+    python gapfill.py -h
+    python gapfill.py -i example.md -o examplemod.md -y example.yaml

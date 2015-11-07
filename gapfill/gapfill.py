@@ -1,13 +1,9 @@
-#!/usr/bin/env python3
-
 '''gapfill
 
 This tiny script takes as input two files, one some form of text and one yaml, 
 replacing the keys in the text file with the values in the yaml.
 
-Requires Python 3.X.
-
-Usage: yamlexpand.py -i <infile> -o <outfile> -y <yaml>
+Usage: gapfill.py -i <infile> -o <outfile> -y <yaml>
 
 Options:
   -h --help     Show this screen.
@@ -34,7 +30,7 @@ with open(arguments['<yaml>'], 'r') as stream:
 # Read in the markdown file, replace the keys, and save to a new file.
 # http://stackoverflow.com/questions/4617034/how-can-i-open-multiple-files-using-with-open-in-python
 with open(arguments['<infile>'], 'r') as infile, \
-    open(arguments['<outfile>'], 'a+') as outfile:
+    open(arguments['<outfile>'], 'w+') as outfile:
     for line in infile:
         buffer = line
         for key, value in d.items():
