@@ -1,7 +1,10 @@
 '''gapfill
 
 This tiny script takes as input two files, one some form of text and one yaml, 
-replacing the keys in the text file with the values in the yaml.
+replacing the keys in the text file with the values in the yaml. It will match
+keys of the for "&key&" with entries in the yaml of the form "key".
+
+Requires Python 3.X if used with non-ASCII characters in the yaml.
 
 Usage: gapfill.py -i <infile> -o <outfile> -y <yaml>
 
@@ -34,7 +37,7 @@ with open(arguments['<infile>'], 'r') as infile, \
     for line in infile:
         buffer = line
         for key, value in d.items():
-            if '&' + key in buffer:
-                buffer = buffer.replace('&' + str(key), str(value))
+            if '&' + key + '&' in buffer:
+                buffer = buffer.replace('&' + str(key) + '&', str(value))
         # print(buffer, end='')
         outfile.write(buffer)

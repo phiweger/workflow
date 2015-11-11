@@ -8,7 +8,7 @@ Requires Python 3.X, otherwise complains: SyntaxError: Non-ASCII character
 '\xc3' in file metazettel.py on line 38, but no encoding declared; 
 see http://www.python.org/peps/pep-0263.html for details. 
 
-Usage: metazettel.py -i <infile> -o <outfile> [-y <yaml>]
+Usage: metazettel.py -i <infile> -o <outfile> -y <yaml>
 
 Options:
   -h --help     Show this screen.
@@ -40,16 +40,26 @@ d = {'kid': 'Niere', 'hea': 'Herz, Papillarmuskel, Koronararterien',
 'ple': 'Pleura', 'per': 'Peritoneum', 'adr': 'Nebenniere', 
 'ski': 'Haut', 'gal': 'Gallenblase', 'val': 'Herzklappen', 
 'thy': 'Schilddrüse', 'pan': 'Pankreas', 'ova': 'Ovar', 
-'tes': 'Hoden', 'pro': 'Prostate', 'pericard': 'Perikard', 
+'tes': 'Hoden', 'pro': 'Prostata', 'pericard': 'Perikard', 
 'ute': 'Uterus', 'eso': 'Ösophagus', 'sto': 'Magen', 
 'col': 'Dickdarm', 'ile': 'Dünndarm', 'rec': 'Rektum',
-'ner': 'Nerv'
+'ner': 'Nerv', 'mus': 'Muskel', 'dis': 'Bandscheibe',
+'uri': 'Harnblase', 'cer': 'Zervix', 'vag': 'Vagina',
+'adn': 'Adnexe', 'tra': 'Trachea'
 }
+
+with open(arguments['<yaml>'], 'r') as stream:
+    dyaml = yaml.load(stream)
 
 index = 0
 organlist = []
 with open(arguments['<infile>'], 'r') as infile, \
     open(arguments['<outfile>'], 'w+') as outfile:
+
+    outfile.write('Sektion: ' + dyaml['nummer'] + ' \n\n' + 
+        'Block | tag | Färbung | Präparat  ' + '\n'
+        '-- | -- | -- | --  '  + '\n')
+
     for line in infile:
         if '&n' in line:
 
@@ -75,8 +85,6 @@ with open(arguments['<infile>'], 'r') as infile, \
 # print(organlist)
 # print(Counter(organlist))
 
-len(set(organlist)) # for code A6015 or something like that
-
 # Convert letters to words via organmap.
 count = Counter([d[key] for key in organlist])
 
@@ -86,11 +94,14 @@ countformat = ['{} x {}\n'.format(value, key) for key, value in count.items()]
 
 with open(arguments['<outfile>'], 'a') as file:
     file.write('\n')
-    [file.write('{} x {}\n'.format(value, key)) for key, value in count.items()]
+    [file.write('{} x {}  \n'.format(value, key)) for key, value in count.items()]
     file.write('\n')
-    file.write(str(len(set(organlist))))
+    file.write(str(len(set(organlist))) + ' x 6015')
 
-# TODO: rewrite using pandas with sep=' | ' and group by organ and stain
+# TODO: 
+# * rewrite using pandas with sep=' | ' and group by organ and stain
+# * count organ groups, not the organs (necessitates the creation of some 
+#   sort of ontology)
 
 
 
