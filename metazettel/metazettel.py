@@ -45,7 +45,7 @@ d = {'kid': 'Niere', 'hea': 'Herz, Papillarmuskel, Koronararterien',
 'col': 'Dickdarm', 'ile': 'Dünndarm', 'rec': 'Rektum',
 'ner': 'Nerv', 'mus': 'Muskel', 'dis': 'Bandscheibe',
 'uri': 'Harnblase', 'cer': 'Zervix', 'vag': 'Vagina',
-'adn': 'Adnexe', 'tra': 'Trachea'
+'adn': 'Adnexe', 'tra': 'Trachea', 'ves': 'Gefäß'
 }
 
 with open(arguments['<yaml>'], 'r') as stream:
@@ -61,7 +61,7 @@ with open(arguments['<infile>'], 'r') as infile, \
         '-- | -- | -- | --  '  + '\n')
 
     for line in infile:
-        if '&n' in line:
+        if '&n ' in line:
 
             # Number the table lines.
             index += 1
@@ -94,6 +94,7 @@ countformat = ['{} x {}\n'.format(value, key) for key, value in count.items()]
 
 with open(arguments['<outfile>'], 'a') as file:
     file.write('\n')
+    file.write('\\newpage')
     [file.write('{} x {}  \n'.format(value, key)) for key, value in count.items()]
     file.write('\n')
     file.write(str(len(set(organlist))) + ' x 6015')
