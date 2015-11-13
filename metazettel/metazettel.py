@@ -95,6 +95,7 @@ countformat = ['{} x {}\n'.format(value, key) for key, value in count.items()]
 with open(arguments['<outfile>'], 'a') as file:
     file.write('\n')
     file.write('\\newpage')
+    file.write('\n\n')
     [file.write('{} x {}  \n'.format(value, key)) for key, value in count.items()]
     file.write('\n')
     file.write(str(len(set(organlist))) + ' x 6015')
