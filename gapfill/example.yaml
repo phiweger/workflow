@@ -1,6 +1,6 @@
 name: Mr. White
 date: 2015-01-01
-color: black
+color: [black, white, grey]
 pina: colada
 foo: bar
 price: 200
