@@ -2,9 +2,10 @@
 
 ### gapfill
 
-This tiny script takes as input two files, one some form of text and one yaml, 
-replacing the keys in the text file with the values in the yaml. It will match
-keys of the for "&key&" with entries in the yaml of the form "key".
+This tiny script takes a template and a yaml, and will use the latter to 
+fill fields in the former. This is coordinated through corresponding keys,
+i.e. a "{{ variable }}" in the template will be filled with its value as 
+specified in the yaml "variable: value" entry.
 
 ### refsort
 
