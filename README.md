@@ -18,3 +18,7 @@ and placed at the bottom of the file.
 This tiny script takes as input a table and a yaml file containing 
 metadata and other information in the form of key: value pairs. It serves
 to quickly summarize a "Kapselzettel".
+
+### yamlcalc
+
+This script calculates some new keys given a yaml file.
