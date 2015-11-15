@@ -17,9 +17,10 @@ Options:
 
 # http://docopt.org/
 from docopt import docopt
+from utils import ordered_load, ordered_dump, calculate_age
 import yaml
 import pandas as pd
-from datetime import date, datetime
+from datetime import datetime
 
 
 
@@ -29,16 +30,13 @@ if __name__ == '__main__':
 
 
 
-# http://stackoverflow.com/questions/2217488/age-from-birthdate-in-python
-def calculate_age(born):
-    today = date.today()
-    return today.year - born.year - ((today.month, today.day) < 
-        (born.month, born.day))
+# unordered:
+# with open(arguments['<yaml>'], 'r') as stream:
+#     d = yaml.load(stream)
 
-
-
+# ordered:
 with open(arguments['<yaml>'], 'r') as stream:
-    d = yaml.load(stream)
+    d = ordered_load(stream, yaml.SafeLoader)
 
 
 
@@ -74,8 +72,13 @@ d['herz_range'] = str(result[0]) + ' - ' + str(result[1])
 
 
 # http://stackoverflow.com/questions/12470665/how-can-i-write-data-in-yaml-format-in-a-file
-# https://dpinte.wordpress.com/2008/10/31/pyaml-dump-option/
-# This automatically sorts the keys alphabetically.
 with open(arguments['<outfile>'], 'w+') as outfile:
-    outfile.write(yaml.dump(d, default_flow_style=False, allow_unicode=True))
+    # unordered:
+    # outfile.write(yaml.dump(d, default_flow_style=False, allow_unicode=True))
+    # ordered:
+    ordered_dump(d, Dumper=yaml.SafeDumper, stream=outfile,
+      default_flow_style=False, allow_unicode=True)
+
+
+
 
