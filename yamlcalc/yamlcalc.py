@@ -67,7 +67,7 @@ if d['geschlecht'] == 'm':
     
     # http://stackoverflow.com/questions/16729574/how-to-get-a-value-from-a-cell-of-a-data-frame
     result = tuple(a.iloc[0])
-d['herz_range'] = str(result[0]) + ' - ' + str(result[1])
+d['gherz_soll'] = str(result[0]) + ' - ' + str(result[1])
 
 
 
