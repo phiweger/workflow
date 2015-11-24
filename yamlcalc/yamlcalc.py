@@ -15,6 +15,13 @@ Options:
 
 '''
 
+
+
+# Avoid writing __pycache__ because this is a Github repo.
+# http://stackoverflow.com/questions/154443/how-to-avoid-pyc-files 
+import sys
+sys.dont_write_bytecode = True
+
 # http://docopt.org/
 from docopt import docopt
 from utils import ordered_load, ordered_dump, calculate_age
