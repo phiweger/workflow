@@ -4,13 +4,12 @@ This script calculates some new keys given a yaml file.
 
 Requires Python 3.X if used with non-ASCII characters in the yaml.
 
-Usage: yamlcalc.py -y <yaml> -o <outfile> -r <ref>
+Usage: yamlcalc.py -y <yaml> -r <ref>
 
 Options:
   -h --help         Show this screen.
   -v --version      Show version.
   -y --yaml         /path/to/yaml
-  -o --outfile      /path/to/outfile 
   -r --reference    /path/to/heart_weight_reference.csv 
 
 '''
@@ -45,12 +44,13 @@ if __name__ == '__main__':
 with open(arguments['<yaml>'], 'r') as stream:
     d = ordered_load(stream, yaml.SafeLoader)
 
+e = {} 
 
 try: # in case no value is found for the "kg" and "cm" keys in .yaml
     bmi = round(d['kg'] / (d['cm'] * 0.01)**2, 1)
 
-    d['bmi'] = str(bmi).replace('.', ',')
-    d['broca'] = d['cm'] - 100
+    e['bmi'] = str(bmi).replace('.', ',')
+    e['broca'] = d['cm'] - 100
 
 except TypeError:
     pass
@@ -59,7 +59,7 @@ except TypeError:
 # http://stackoverflow.com/questions/6288892/convert-datetime-format
 try:
     dob = datetime.strptime(d['dob'], '%d.%m.%Y')
-    d['alter'] = calculate_age(dob) 
+    e['alter'] = calculate_age(dob) 
 except TypeError:
     pass
 
@@ -79,19 +79,21 @@ try:
         
         # http://stackoverflow.com/questions/16729574/how-to-get-a-value-from-a-cell-of-a-data-frame
         result = tuple(a.iloc[0])
-    d['gherz_soll'] = str(result[0]) + ' - ' + str(result[1])
+    e['gherz_soll'] = str(result[0]) + ' - ' + str(result[1])
 
 except TypeError:
     pass
 
+# print(e)
 
-# http://stackoverflow.com/questions/12470665/how-can-i-write-data-in-yaml-format-in-a-file
-with open(arguments['<outfile>'], 'w+') as outfile:
-    # unordered:
-    # outfile.write(yaml.dump(d, default_flow_style=False, allow_unicode=True))
-    # ordered:
-    ordered_dump(d, Dumper=yaml.SafeDumper, stream=outfile,
-      default_flow_style=False, allow_unicode=True)
+if e: # if e contains any key:value pairs
+    # http://stackoverflow.com/questions/12470665/how-can-i-write-data-in-yaml-format-in-a-file
+    with open(arguments['<yaml>'], 'a+') as outfile:
+        # unordered:
+        # outfile.write(yaml.dump(d, default_flow_style=False, allow_unicode=True))
+        # ordered:
+        ordered_dump(e, Dumper=yaml.SafeDumper, stream=outfile,
+          default_flow_style=False, allow_unicode=True)
 
 
 
