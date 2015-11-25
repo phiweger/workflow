@@ -56,9 +56,13 @@ organlist = []
 with open(arguments['<infile>'], 'r') as infile, \
     open(arguments['<outfile>'], 'w+') as outfile:
 
-    outfile.write('Sektion: ' + dyaml['nummer'] + ' \n\n' + 
-        'Block | tag | Färbung | Präparat  ' + '\n'
-        '-- | -- | -- | --  '  + '\n')
+    try: # in case no value is found for key "nummer" in yaml
+        outfile.write('Sektion: ' + dyaml['nummer'] + ' \n\n') 
+    except TypeError:
+        pass
+
+    outfile.write('Block | tag | Färbung | Präparat  ' + '\n' +
+            '-- | -- | -- | --  '  + '\n')
 
     for line in infile:
         if '&n ' in line:
@@ -77,7 +81,9 @@ with open(arguments['<infile>'], 'r') as infile, \
             # Python Cookbook, 3rd edition, p. 44, 'Discussion'
                 o = [i.strip() for i in m.group(1).split(',')]
                 for i in o:
-                    organlist.append(i)
+                    if i != '': 
+                    # empty comments "<!-- -->"" are not included in count
+                        organlist.append(i)
             except AttributeError:
                 pass
                 # print('Nothing here.') # for debugging
@@ -99,6 +105,8 @@ with open(arguments['<outfile>'], 'a') as file:
     [file.write('{} x {}  \n'.format(value, key)) for key, value in count.items()]
     file.write('\n')
     file.write(str(len(set(organlist))) + ' x 6015')
+
+
 
 # TODO: 
 # * rewrite using pandas with sep=' | ' and group by organ and stain

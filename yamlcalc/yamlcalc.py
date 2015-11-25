@@ -46,36 +46,43 @@ with open(arguments['<yaml>'], 'r') as stream:
     d = ordered_load(stream, yaml.SafeLoader)
 
 
+try: # in case no value is found for the "kg" and "cm" keys in .yaml
+    bmi = round(d['kg'] / (d['cm'] * 0.01)**2, 1)
 
-bmi = round(d['kg'] / (d['cm'] * 0.01)**2, 1)
-d['bmi'] = str(bmi).replace('.', ',')
+    d['bmi'] = str(bmi).replace('.', ',')
+    d['broca'] = d['cm'] - 100
 
-d['broca'] = d['cm'] - 100
-
+except TypeError:
+    pass
 
 
 # http://stackoverflow.com/questions/6288892/convert-datetime-format
-dob = datetime.strptime(d['dob'], '%d.%m.%Y')
-d['alter'] = calculate_age(dob) 
-
+try:
+    dob = datetime.strptime(d['dob'], '%d.%m.%Y')
+    d['alter'] = calculate_age(dob) 
+except TypeError:
+    pass
 
 
 heartref = pd.read_csv(arguments['<ref>'])
 
-# http://stackoverflow.com/questions/12141150/from-list-of-integers-get-number-closest-to-a-given-value
-valuepick = min(heartref['kg'], key=lambda x:abs(x-d['kg']))
-if d['geschlecht'] == 'f':
-    a = heartref[heartref['kg'] == valuepick][['low female', 'high female']]
-    
-    # http://stackoverflow.com/questions/16729574/how-to-get-a-value-from-a-cell-of-a-data-frame
-    result = tuple(a.iloc[0])
-if d['geschlecht'] == 'm':
-    a = heartref[heartref['kg'] == valuepick][['low male', 'high male']]
-    
-    # http://stackoverflow.com/questions/16729574/how-to-get-a-value-from-a-cell-of-a-data-frame
-    result = tuple(a.iloc[0])
-d['gherz_soll'] = str(result[0]) + ' - ' + str(result[1])
+try:
+    # http://stackoverflow.com/questions/12141150/from-list-of-integers-get-number-closest-to-a-given-value
+    valuepick = min(heartref['kg'], key=lambda x:abs(x-d['kg']))
+    if d['geschlecht'] == 'f':
+        a = heartref[heartref['kg'] == valuepick][['low female', 'high female']]
+        
+        # http://stackoverflow.com/questions/16729574/how-to-get-a-value-from-a-cell-of-a-data-frame
+        result = tuple(a.iloc[0])
+    if d['geschlecht'] == 'm':
+        a = heartref[heartref['kg'] == valuepick][['low male', 'high male']]
+        
+        # http://stackoverflow.com/questions/16729574/how-to-get-a-value-from-a-cell-of-a-data-frame
+        result = tuple(a.iloc[0])
+    d['gherz_soll'] = str(result[0]) + ' - ' + str(result[1])
 
+except TypeError:
+    pass
 
 
 # http://stackoverflow.com/questions/12470665/how-can-i-write-data-in-yaml-format-in-a-file
