@@ -59,7 +59,10 @@ if diff: # if set is not empty, i.e. bool({}) evaluates to False
 
 #                                                   ---------------------------
 # Write to file.
-with open(arguments['<outfile>'], 'w+') as outfile:
+with open(arguments['<outfile>'], 'a+') as outfile:
+    # w+ would overwrite the file. But if for some reason we ran this script 
+    # twice but edited the file created after the first run in between, all
+    # edits would be lost, which is not desirable.
     outfile.write(template.render(d))
 
 
